@@ -40,4 +40,20 @@ Si le televersement echoue : maintenir **BOOT**, appuyer sur **RESET**, relacher
 
 Cellule vers HX711 : rouge E+, noir E-, blanc A-, vert A+.
 
-Moniteur serie (`pio device monitor`), commandes : `t` tare, `c<grammes>` calibration avec un poids connu (ex. `c200`), `r` valeur brute. Le facteur est sauvegarde en flash.
+### Calibration
+
+Ouvrir le moniteur serie (un seul moniteur a la fois peut utiliser le port) :
+
+```bash
+pio device monitor -p /dev/cu.usbmodem142401 --echo
+```
+
+Taper chaque commande puis **Entree** :
+
+1. Plateau **vide** : `t` (tare). Attendre `Tare OK`.
+2. Poser un poids connu sur le plateau, puis `c<grammes>`, par exemple `c500` pour 500 g.
+3. La balance affiche ensuite des grammes. Le facteur est sauvegarde en flash et survit au redemarrage.
+
+Autres commandes : `r` affiche la valeur brute.
+
+Si le poids diminue quand on appuie sur la cellule, inverser les fils A+ et A- sur l'HX711, puis recalibrer.
