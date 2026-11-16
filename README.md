@@ -28,3 +28,16 @@ Si le televersement echoue : maintenir **BOOT**, appuyer sur **RESET**, relacher
 - `lib/` bibliotheques locales
 - `test/` tests
 - `platformio.ini` configuration de la carte
+
+## Balance (HX711 + cellule 5 kg)
+
+| HX711 | ESP32-C6 |
+|---|---|
+| VCC | 3V3 |
+| GND | GND |
+| DT | GPIO 18 |
+| SCK | GPIO 19 |
+
+Cellule vers HX711 : rouge E+, noir E-, blanc A-, vert A+.
+
+Moniteur serie (`pio device monitor`), commandes : `t` tare, `c<grammes>` calibration avec un poids connu (ex. `c200`), `r` valeur brute. Le facteur est sauvegarde en flash.
