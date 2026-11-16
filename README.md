@@ -1,35 +1,34 @@
 # Scale FikaRobot
 
-Firmware ESP32-C6 (carte ESP32-C6-DevKitC-1, module ESP32-C6-WROOM-1) pour le projet FikaRobot.
+ESP32-C6 firmware (ESP32-C6-DevKitC-1 board, ESP32-C6-WROOM-1 module) for the FikaRobot project.
 
-## Prerequis
-
-```bash
-brew install platformio
-```
-
-## Utilisation
+## Requirements
 
 ```bash
-pio run                 # compiler
-pio run -t upload       # compiler + televerser (branche la carte en USB-C)
-pio device monitor      # moniteur serie (115200)
+pip install platformio
 ```
 
-Le programme actuel (`src/main.cpp`) est un test : la LED RGB integree (GPIO8)
-alterne rouge, vert, bleu, blanc, eteint.
+(or `brew install platformio` on a machine with prebuilt Homebrew bottles).
 
-Si le televersement echoue : maintenir **BOOT**, appuyer sur **RESET**, relacher BOOT, puis relancer.
+## Usage
 
-## Structure
+```bash
+pio run                 # build
+pio run -t upload       # build + upload (plug the board in via USB-C)
+pio device monitor      # serial monitor (115200)
+```
 
-- `src/` code principal
-- `include/` en-tetes
-- `lib/` bibliotheques locales
+If the upload fails: hold **BOOT**, press **RESET**, release BOOT, then retry.
+
+## Project structure
+
+- `src/` main code
+- `include/` headers
+- `lib/` local libraries
 - `test/` tests
-- `platformio.ini` configuration de la carte
+- `platformio.ini` board configuration
 
-## Balance (HX711 + cellule 5 kg)
+## Scale (HX711 + 5 kg load cell)
 
 | HX711 | ESP32-C6 |
 |---|---|
@@ -38,22 +37,22 @@ Si le televersement echoue : maintenir **BOOT**, appuyer sur **RESET**, relacher
 | DT | GPIO 18 |
 | SCK | GPIO 19 |
 
-Cellule vers HX711 : rouge E+, noir E-, blanc A-, vert A+.
+Load cell to HX711: red E+, black E-, white A-, green A+.
 
 ### Calibration
 
-Ouvrir le moniteur serie (un seul moniteur a la fois peut utiliser le port) :
+Open the serial monitor (only one monitor can use the port at a time):
 
 ```bash
 pio device monitor -p /dev/cu.usbmodem142401 --echo
 ```
 
-Taper chaque commande puis **Entree** :
+Type each command, then press **Enter**:
 
-1. Plateau **vide** : `t` (tare). Attendre `Tare OK`.
-2. Poser un poids connu sur le plateau, puis `c<grammes>`, par exemple `c500` pour 500 g.
-3. La balance affiche ensuite des grammes. Le facteur est sauvegarde en flash et survit au redemarrage.
+1. With the platform **empty**: `t` (tare). Wait for `Tare OK`.
+2. Place a known weight on the platform, then `c<grams>`, e.g. `c500` for 500 g.
+3. The scale now reports grams. The calibration factor is saved to flash and survives reboots.
 
-Autres commandes : `r` affiche la valeur brute.
+Other commands: `r` prints the raw value.
 
-Si le poids diminue quand on appuie sur la cellule, inverser les fils A+ et A- sur l'HX711, puis recalibrer.
+If the reading decreases when you press on the load cell, swap the A+ and A- wires on the HX711, then recalibrate.
